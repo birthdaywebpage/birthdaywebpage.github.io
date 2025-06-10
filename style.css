@@ -55,11 +55,21 @@ body{
     background-color: rgb(255, 244, 79);
     box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
     transform: rotateY(180deg);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding: 1.5rem;
 }
 .inside h3{
     font-size: 1.2rem;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .frames{
     width: 400px;
@@ -86,7 +96,7 @@ body{
 }
 .frames:nth-child(1)
 {
-    top:-110px;
+    top:-180px;
     z-index: -1;
     background-color: coral;
 }
@@ -95,6 +105,11 @@ body{
 }
 .frames:nth-child(3)
 {
-    top:100px;
+    top:180px;
     background-color: burlywood;
+}
+
+h1, p {
+  color: #ffcc66; 
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }

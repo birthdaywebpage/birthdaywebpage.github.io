@@ -1,42 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Surprise</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
+  <!-- First Page -->
+  <div id="page1" class="page active">
+    <h1>Happy Birthday Keertana!</h1>
+    <p>Your Birthday Present Awaits 🎁</p>
+    <input type="text" id="input1" placeholder="First word" />
+    <input type="text" id="input2" placeholder="Second word" />
+    <input type="text" id="input3" placeholder="Third word" />
+    <button onclick="checkWords()">Submit</button>
+    <p id="error-msg" style="color:red; display:none;">Oops! Try again.</p>
+  </div>
+
+    <!-- Second Page -->
+    <div id="page2" class="page">
+    <audio id="bg-music" src="resources/music_bg.mp3"></audio>
+
     <div class="container">
         <div class="card">
-            <div class="outside">
-                <h1>Happy Birthday</h1>
-                <h3>Lorem Ipsum/h3>
-            </div>
-            <div class="inside">
-                <img src="resources/cakegif.gif"/>
-                <h3>Lorem Ipsum
-                </h3>
-            </div>
+        <div class="outside">
+            <h1>Happy Birthday!</h1>
+            <h3>I truly hope that you enjoy your birthday amongst all the choas! It has been an amazing month and half getting to know you so far! You complement me in ways I couldn't even dream of.</h3>
+        </div>
+        <div class="inside">
+            <img src="resources/cakegif.gif" />
+            <h3>It's scary how far we have come in a short time but I think that is a sign that we have something unique here. I am excited for what the future holds for us!</h3>
+        </div>
         </div>
 
         <div class="block">
-            <div class="frames frame1">
-                <img src="resources/img1.png" alt="">
-                <p>Lorem Ipsum</p>
-            </div>
-            <div class="frames frame2">
-                <img src="resources/img2.png" alt="">
-                <p>Lorem Ipsum
-                </p>
-            </div>
-            <div class="frames frame3">
-                <img src="resources/img3.png" alt="">
-                <p>Lorem Ipsum</p>
-            </div>
+        <div class="frames frame1">
+            <!-- <img src="resources/img1.png" alt="" /> -->
+            <p>Congrats on a successful launch for Palam! It is inspiring to see all the hard work turn into amazing achievements! </p>
         </div>
-
+        <div class="frames frame2">
+            <!-- <img src="resources/img2.png" alt="" /> -->
+            <p>Your ability to say yes to everyone and everything is one that amazes me constantly!</p>
+        </div>
+        <div class="frames frame3">
+            <!-- <img src="resources/img3.png" alt="" /> -->
+            <p>Without me, who would you ever find to annoy you in all the amazing ways that I do? </p>
+        </div>
+        </div>
     </div>
+    </div>
+
+
+  <!-- JavaScript for hashing and logic -->
+  <script>
+    // Helper: converts ArrayBuffer to hex string
+    function bufferToHex(buffer) {
+      return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // SHA-256 hash of the input string
+    async function hashString(str) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str.trim().toLowerCase());
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return bufferToHex(hashBuffer);
+    }
+
+    async function checkWords() {
+        const input1 = document.getElementById("input1").value;
+        const input2 = document.getElementById("input2").value;
+        const input3 = document.getElementById("input3").value;
+
+        const hash1 = await hashString(input1);
+        const hash2 = await hashString(input2);
+        const hash3 = await hashString(input3);
+
+        const correct1 = [
+        "f14896d8de9dc78832dd48b54e59714276aeb82a7c6e641abf0694f4c0249de9" // "n"
+        ];
+
+        const correct2 = [
+        "ab7902bcbd91137e09d6aeb83a2a8853f75878830c4a550ac8ef2b0ae12b8c86", // o
+        "e971c330aab8741082ab062c2d63f754238c6f46aac59291b07beff6b5a87dd7", // i
+        "770875de6bd8d93f9d4fc410cd2d8d40b84b73706a6fb12714c3439c2d441858" // b
+        ];
+
+        const correct3 = [
+            "d0b3cba71f725563d316ea3516099328042095d10f4571be25c07f9ce31985a5" // "b"
+        ];
+
+        // Example: check if hash1 is included in correct1 array, and so on
+        if (correct1.includes(hash1) && correct2.includes(hash2) && correct3.includes(hash3))  {
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page2").classList.add("active");
+
+            // Play the music only now
+            const audio = document.getElementById("bg-music");
+            audio.play().catch(e => {
+                console.error("Playback failed:", e);
+            });
+        } else {
+            document.getElementById("error-msg").style.display = "block";
+        }
+
+    }
+
+  </script>
 </body>
 </html>
